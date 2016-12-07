@@ -15,23 +15,25 @@
     tools:context="co.enoobong.bulksms.MainActivity">
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/phoneNumbers"
+        android:id="@+id/phoneNumberInputLayour"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Phone numbers">
         <android.support.design.widget.TextInputEditText
+            android:id="@+id/phoneNumbers"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textCapSentences|textMultiLine"/>
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/message"
+        android:id="@+id/messageInputLayour"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/phoneNumbers"
+        android:layout_below="@id/phoneNumberInputLayour"
         android:hint="Message">
         <android.support.design.widget.TextInputEditText
+            android:id="@+id/message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textCapSentences|textMultiLine"
@@ -43,7 +45,7 @@
         android:id="@+id/sendButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/message"
+        android:layout_below="@id/messageInputLayour"
         android:text="Send"/>
 
 
