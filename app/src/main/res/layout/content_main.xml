@@ -34,7 +34,9 @@
         <android.support.design.widget.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textCapSentences|textMultiLine" />
+            android:inputType="textCapSentences|textMultiLine"
+            android:maxLength="160"
+            android:minLines="5"/>
     </android.support.design.widget.TextInputLayout>
 
     <Button
