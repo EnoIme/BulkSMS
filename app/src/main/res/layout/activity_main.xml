@@ -23,7 +23,7 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_main"/>
+    <include android:id="@+id/content_main" layout="@layout/content_main"/>
 
     <com.github.clans.fab.FloatingActionMenu
         android:layout_width="wrap_content"
@@ -33,19 +33,19 @@
         <com.github.clans.fab.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/addFromContacts"
-            android:layout_gravity="bottom|end"
-            android:layout_margin="@dimen/fab_margin"
-            android:src= "@android:drawable/ic_menu_add"
-            app:fab_label="Add phone numbers from contacts"/>
-        <com.github.clans.fab.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:id="@+id/addFromCSV"
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/fab_margin"
             android:src= "@android:drawable/ic_menu_add"
             app:fab_label="Add phone numbers from .csv file"/>
+        <com.github.clans.fab.FloatingActionButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/addFromContacts"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="@dimen/fab_margin"
+            android:src= "@android:drawable/ic_menu_add"
+            app:fab_label="Add phone numbers from contacts"/>
     </com.github.clans.fab.FloatingActionMenu>
 
 </android.support.design.widget.CoordinatorLayout>
