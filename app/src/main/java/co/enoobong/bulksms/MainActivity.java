@@ -41,17 +41,44 @@ import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.SEND_SMS;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    private static final int FILE_SELECT_CODE = 1;
-    private static final String TAG = "MainActivity";
-    private static final String SMS_SENT = "sent";
-    private static final String SMS_DELIVERED = "delivered";
+    private static final int FILE_SELECT_CODE = 0;
     private static final int REQUEST_READ_CONTACTS = 0;
     private static final int REQUEST_READ_STORAGE = 1;
     private static final int REQUEST_SEND_SMS = 2;
+    private static final String TAG = "MainActivity";
+    private static final String SMS_SENT = "sent";
+    private static final String SMS_DELIVERED = "delivered";
     private TextInputEditText phoneNumberET, messageET;
     private FloatingActionButton addFromContacts, addFromCSV;
     private Button sendMessage;
-    private BroadcastReceiver receiver = new BroadcastReceiver() {
+    private BroadcastReceiver sentReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String message = null;
+            switch (getResultCode()) {
+                case Activity.RESULT_OK:
+                    message = "Message Sent";
+                    break;
+                case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
+                    message = "Error. Message not sent.";
+                    break;
+                case SmsManager.RESULT_ERROR_NO_SERVICE:
+                    message = "Error: No service.";
+                    break;
+                case SmsManager.RESULT_ERROR_NULL_PDU:
+                    message = "Error: Null PDU.";
+                    break;
+                case SmsManager.RESULT_ERROR_RADIO_OFF:
+                    message = "Error: Radio off.";
+                    break;
+            }
+
+            Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
+
+        }
+    };
+
+    private BroadcastReceiver delieveredReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String message = null;
@@ -96,7 +123,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         addFromContacts.setOnClickListener(this);
         addFromCSV.setOnClickListener(this);
         sendMessage.setOnClickListener(this);
-        registerReceiver(receiver, new IntentFilter(SMS_SENT));
+        registerReceiver(sentReceiver, new IntentFilter(SMS_SENT));
+        registerReceiver(delieveredReceiver, new IntentFilter(SMS_DELIVERED));
+
 
 //       FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 //        fab.setOnClickListener(new View.OnClickListener() {
@@ -217,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void sendMessage(String[] phoneNumbers, String message) {
-        if (phoneNumbers.length < 0) {
+        if (phoneNumbers.length < 1) {
             phoneNumberET.setError(getString(R.string.add_numbers));
             phoneNumberET.requestFocus();
             Toast.makeText(this, "Pick a phone number", Toast.LENGTH_SHORT).show();
@@ -366,7 +395,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onDestroy() {
-        unregisterReceiver(receiver);
+        unregisterReceiver(sentReceiver);
+        unregisterReceiver(delieveredReceiver);
         super.onDestroy();
     }
 }
