@@ -171,13 +171,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case FILE_SELECT_CODE:
                 if (resultCode == RESULT_OK) {
                     Uri uri = data.getData();
-                    String filePath = uri.getPath();
                     String[] projection = {MediaStore.Files.FileColumns.DATA};
                     Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
-                    cursor.moveToFirst();
-                    String path = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATA));
-                    Log.d(TAG, filePath + " " + path);
-                    cursor.close();
+                    String path = "";
+                    try {
+                        cursor = getContentResolver().query(uri, projection, null, null, null);
+                        assert cursor != null;
+                        cursor.moveToFirst();
+                        path = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATA));
+                    } finally {
+                        assert cursor != null;
+                        cursor.close();
+                    }
                     getPhoneNumbersFromCSV(path);
                 }
                 break;
@@ -188,7 +193,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void getPhoneNumbersFromCSV(String uri){
         File file = new File(uri);
-        Log.d(TAG, file.toString());
         StringBuilder builder = new StringBuilder();
         InputStream inputStream = null;
         try{
@@ -214,7 +218,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void sendMessage(String[] phoneNumbers, String message) {
         if (phoneNumbers.length < 0) {
-            phoneNumberET.setError("Please select some numbers");
+            phoneNumberET.setError(getString(R.string.add_numbers));
             phoneNumberET.requestFocus();
             Toast.makeText(this, "Pick a phone number", Toast.LENGTH_SHORT).show();
             return;
@@ -234,26 +238,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             smsManager.sendTextMessage(phoneNumber, null, message, piSend, piDelivered);
         }
 
-    }
-
-    public String getPath(Uri uri) {
-
-        String path;
-        String[] projection = {MediaStore.Files.FileColumns.DATA};
-        Cursor cursor = getContentResolver().query(uri, projection, null, null, null);
-
-        if (cursor == null) {
-            path = uri.getPath();
-            Log.d(TAG, path);
-        } else {
-            cursor.moveToFirst();
-            int column_index = cursor.getColumnIndexOrThrow(projection[0]);
-            path = cursor.getString(column_index);
-            Log.d(TAG, path);
-            cursor.close();
-        }
-
-        return ((path == null || path.isEmpty()) ? (uri.getPath()) : path);
     }
 
     @Override

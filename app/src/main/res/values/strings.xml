@@ -3,4 +3,5 @@
     <string name="action_settings">Settings</string>
     <string name="message" />
     <string name="permission_rationale">BulkSMS needs to read your contacts</string>
+    <string name="add_numbers">Please select some numbers</string>
 </resources>
