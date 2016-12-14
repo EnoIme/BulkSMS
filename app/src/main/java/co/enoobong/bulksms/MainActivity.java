@@ -178,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     String path = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Files.FileColumns.DATA));
                     Log.d(TAG, filePath + " " + path);
                     cursor.close();
-                    getPhoneNumbersFromCSV(filePath);
+                    getPhoneNumbersFromCSV(path);
                 }
                 break;
             default:
@@ -213,6 +213,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void sendMessage(String[] phoneNumbers, String message) {
+        if (phoneNumbers.length < 0) {
+            phoneNumberET.setError("Please select some numbers");
+            phoneNumberET.requestFocus();
+            Toast.makeText(this, "Pick a phone number", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if (message.isEmpty()) {
+            messageET.setError("Please Enter a message");
+            messageET.requestFocus();
+            Toast.makeText(this, "Enter a message", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         SmsManager smsManager = SmsManager.getDefault();
         PendingIntent piSend = PendingIntent.getBroadcast(this, 0, new Intent(SMS_SENT), 0);
         PendingIntent piDelivered = PendingIntent.getBroadcast(this, 0, new Intent(SMS_DELIVERED), 0);
