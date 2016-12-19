@@ -41,6 +41,7 @@ import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
 import static android.Manifest.permission.SEND_SMS;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+
     private static final int FILE_SELECT_CODE = 0;
     private static final int REQUEST_READ_CONTACTS = 0;
     private static final int REQUEST_READ_STORAGE = 1;
@@ -78,13 +79,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     };
 
-    private BroadcastReceiver delieveredReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver deliveredReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String message = null;
             switch (getResultCode()) {
                 case Activity.RESULT_OK:
-                    message = "Message Sent";
+                    message = "Message Delivered";
                     break;
                 case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
                     message = "Error. Message not sent.";
@@ -124,17 +125,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         addFromCSV.setOnClickListener(this);
         sendMessage.setOnClickListener(this);
         registerReceiver(sentReceiver, new IntentFilter(SMS_SENT));
-        registerReceiver(delieveredReceiver, new IntentFilter(SMS_DELIVERED));
-
-
-//       FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
+        registerReceiver(deliveredReceiver, new IntentFilter(SMS_DELIVERED));
     }
 
     @Override
@@ -396,7 +387,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onDestroy() {
         unregisterReceiver(sentReceiver);
-        unregisterReceiver(delieveredReceiver);
+        unregisterReceiver(deliveredReceiver);
         super.onDestroy();
     }
 }
