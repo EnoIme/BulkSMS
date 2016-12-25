@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "512538227656",
+    "firebase_url": "https://bulksms-fc96f.firebaseio.com",
+    "project_id": "bulksms-fc96f",
+    "storage_bucket": "bulksms-fc96f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:512538227656:android:4a20b91a41c8e374",
+        "android_client_info": {
+          "package_name": "co.enoobong.bulksms"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "512538227656-nvc1brjo7ece63rq8jhmb9k75hk44132.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "co.enoobong.bulksms",
+            "certificate_hash": "F1829DDBE3FCE5B2DE8DE84799DA19D1258AA71E"
+          }
+        },
+        {
+          "client_id": "512538227656-sn05fmrd0gv9pc4bfrba0821lq7qtjkf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD9NtOn1Vco9yW9jEEZ5EZhNDi1Uk2jXC4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "512538227656-sn05fmrd0gv9pc4bfrba0821lq7qtjkf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
