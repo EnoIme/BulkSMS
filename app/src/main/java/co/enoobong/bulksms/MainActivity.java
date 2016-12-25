@@ -28,6 +28,8 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -49,10 +51,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final String TAG = "MainActivity";
     private static final String SMS_SENT = "sent";
     private static final String SMS_DELIVERED = "delivered";
+    private static final String MESSAGES = "messages";
+    private int COUNT = 0;
+    private String userId;
     private TextInputEditText phoneNumberET, messageET;
     private FloatingActionButton addFromContacts, addFromCSV;
     private Button sendMessage;
+    private DatabaseReference mDatabase;
     private BroadcastReceiver sentReceiver = new BroadcastReceiver() {
+        int count = 0;
         @Override
         public void onReceive(Context context, Intent intent) {
             String message = null;
@@ -75,11 +82,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
-
+            mDatabase.child(String.valueOf(count)).child("report").setValue(message);
+            count++;
         }
     };
 
     private BroadcastReceiver deliveredReceiver = new BroadcastReceiver() {
+        int count = 0;
         @Override
         public void onReceive(Context context, Intent intent) {
             String message = null;
@@ -102,6 +111,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
+            mDatabase.child(String.valueOf(count)).child("report").setValue(message);
+            count++;
 
         }
     };
@@ -112,6 +123,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference = firebaseDatabase.getReference();
+        userId = databaseReference.push().getKey();
+        mDatabase = firebaseDatabase.getReference(userId).child(MESSAGES);
 
         addFromContacts = (FloatingActionButton) findViewById(R.id.addFromContacts);
         addFromCSV = (FloatingActionButton) findViewById(R.id.addFromCSV);
@@ -256,7 +273,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         PendingIntent piDelivered = PendingIntent.getBroadcast(this, 0, new Intent(SMS_DELIVERED), 0);
         for (String phoneNumber : phoneNumbers) {
             smsManager.sendTextMessage(phoneNumber, null, message, piSend, piDelivered);
+            mDatabase.child(String.valueOf(COUNT)).child("phone_number").setValue(phoneNumber);
+            mDatabase.child(String.valueOf(COUNT)).child("content").setValue(message);
+            COUNT++;
+
         }
+        //messageET.setText("");
 
     }
 
